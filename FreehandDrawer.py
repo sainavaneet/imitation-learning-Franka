@@ -6,8 +6,8 @@ import json
 class FreehandDrawer:
     def __init__(self):
         self.fig, self.ax = plt.subplots()
-        self.ax.set_ylim(-0.4, 0.4)
-        self.ax.set_xlim(0.2, 0.5)
+        self.ax.set_ylim(-0.6, 0.6)
+        self.ax.set_xlim(0.0, 0.6)
         self.ax.spines['left'].set_position(('data', 0))
         self.ax.spines['bottom'].set_position(('data', 0))
         self.ax.spines['right'].set_color('none')
@@ -43,7 +43,7 @@ class FreehandDrawer:
         self.cidpress = self.fig.canvas.mpl_connect('button_press_event', self.on_press)
         self.cidrelease = self.fig.canvas.mpl_connect('button_release_event', self.on_release)
         self.cidmove = self.fig.canvas.mpl_connect('motion_notify_event', self.on_move)
-        plt.title('Draw freely. Close window when done.')
+        plt.title('Close window when done.')
         plt.show()
         self.fig.canvas.mpl_disconnect(self.cidpress)
         self.fig.canvas.mpl_disconnect(self.cidrelease)
