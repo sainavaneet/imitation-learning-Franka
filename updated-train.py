@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import json
-import time
+
 from utils import ImitationLearningModel
 
 def load_dataset(file_path):
@@ -12,17 +12,17 @@ def load_dataset(file_path):
     return data
 
 def prepare_data(dataset):
+    # Adjusted to match the keys in your dataset
     inputs = torch.tensor([entry["desired_end_effector_position"] for entry in dataset]).float()
     targets = torch.tensor([entry["joint_angles"] for entry in dataset]).float()
     return inputs, targets
 
 if __name__ == "__main__":
-    start_time = time.time()  # Start timing
-    dataset_path = "/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/datasets/newdataset.json"
+    dataset_path = "/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/datasets/diffusion_dataset.json"
     dataset = load_dataset(dataset_path)
     inputs, targets = prepare_data(dataset)
 
-    model = ImitationLearningModel()
+    model = ImitationLearningModel()  # Ensure this model is suitable for your input and output dimensions
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=0.01)
 
@@ -33,12 +33,12 @@ if __name__ == "__main__":
         loss = criterion(outputs, targets)
         loss.backward()
         optimizer.step()
+        
         if epoch % 100 == 0:
             print(f"Epoch {epoch}, Loss: {loss.item()}")
 
     # Save the trained model
-    torch.save(model.state_dict(), "/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/models/newmodel.pth")
-    end_time = time.time()  # End timing
-    total_time = end_time - start_time
-    print(f"Total training time: {total_time} seconds")
+    torch.save(model.state_dict(), "/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/models/imitation_model.pth")
     print("Model training complete and saved.")
+
+

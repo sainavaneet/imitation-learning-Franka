@@ -13,6 +13,27 @@ import torch.nn.functional as F
 from utils import ImitationLearningModel
 
 
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+import json
+
+class ImitationLearningModel(nn.Module):
+    def __init__(self):
+        super(ImitationLearningModel, self).__init__()
+        self.fc1 = nn.Linear(3, 128)  
+        self.fc2 = nn.Linear(128, 256)
+        self.fc3 = nn.Linear(256, 128)
+        self.fc4 = nn.Linear(128, 7)  
+
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = torch.relu(self.fc2(x))
+        x = torch.relu(self.fc3(x))
+        x = self.fc4(x)
+        return x
+
 rospy.init_node('robot_trajectory_follower', anonymous=True)
 tf_buffer = tf2_ros.Buffer()
 tf_listener = tf2_ros.TransformListener(tf_buffer)
@@ -39,11 +60,16 @@ def update_end_effector_position():
 def move_to_joint_angles(joint_angles):
     for i, angle in enumerate(joint_angles):
         joints_publishers[i].publish(Float64(data=angle))
-    rospy.sleep(0.01)
+    rospy.sleep(0.03)
 
 
 model = ImitationLearningModel().to(device)
-model.load_state_dict(torch.load('models/model.pth'))
+
+#<<<<-----------Model--------------->>>>
+
+# model.load_state_dict(torch.load('models/diffusion_model.pth'))
+model.load_state_dict(torch.load('/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/models/newmodel.pth'))
+
 
 def follow_trajectory(desired_trajectory):
     for point in desired_trajectory:
@@ -51,10 +77,10 @@ def follow_trajectory(desired_trajectory):
         joint_angles = model(desired_position)
         joint_angles_np = joint_angles.cpu().detach().numpy().squeeze()
         move_to_joint_angles(joint_angles_np)
-        rospy.sleep(0.03)  
+        rospy.sleep(0.02)  
 
 if __name__ == "__main__":
-    initial_joint_angles = [0, -0.7, 0, -2.35619449, 0, 1.57079632679, 0.785398163397]
+    initial_joint_angles = [0.0, -0.785398163, 0.0, -2.35619449, 0, 1.57079632679, 0.785398163397]
     move_to_joint_angles(initial_joint_angles)
     rospy.sleep(2)
     move_to_joint_angles(initial_joint_angles)
@@ -64,7 +90,7 @@ if __name__ == "__main__":
 
     update_end_effector_position()
     drawer = FreehandDrawer()
-    constant_z_height = 0.7
+    constant_z_height = 0.5
     drawn_trajectory_2d = drawer.draw_trajectory()
     desired_trajectory = [np.array([x, y, constant_z_height]) for x, y in drawn_trajectory_2d]
     follow_trajectory(desired_trajectory)

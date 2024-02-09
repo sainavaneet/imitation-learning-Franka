@@ -6,8 +6,8 @@ import json
 class FreehandDrawer:
     def __init__(self):
         self.fig, self.ax = plt.subplots()
-        self.ax.set_ylim(-0.6, 0.6)
-        self.ax.set_xlim(0.2, 0.6)
+        self.ax.set_ylim(-0.7, 0.7)
+        self.ax.set_xlim(0.0, 0.6)
         self.ax.spines['left'].set_position(('data', 0))
         self.ax.spines['bottom'].set_position(('data', 0))
         self.ax.spines['right'].set_color('none')
@@ -22,8 +22,7 @@ class FreehandDrawer:
         self.is_drawing = False
 
     def on_press(self, event):
-        if event.inaxes != self.ax:
-            return
+        if event.inaxes != self.ax: return
         self.is_drawing = True
         self.xs = [event.xdata]
         self.ys = [event.ydata]
@@ -32,8 +31,7 @@ class FreehandDrawer:
         self.is_drawing = False
 
     def on_move(self, event):
-        if not self.is_drawing or event.inaxes != self.ax:
-            return
+        if not self.is_drawing or event.inaxes != self.ax: return
         self.xs.append(event.xdata)
         self.ys.append(event.ydata)
         self.line.set_data(self.xs, self.ys)
@@ -50,6 +48,10 @@ class FreehandDrawer:
         self.fig.canvas.mpl_disconnect(self.cidmove)
         return list(zip(self.xs, self.ys))
 
+def add_noise_to_angles(joint_angles, noise_std=0.0001):
+    noisy_angles = joint_angles + np.random.normal(0, noise_std, joint_angles.shape)
+    return noisy_angles
+
 if __name__ == "__main__":
     drawer = FreehandDrawer()
     trajectory = drawer.draw_trajectory()
@@ -60,19 +62,20 @@ if __name__ == "__main__":
 
     for point in trajectory:
         desired_position = np.array([point[0], point[1], 0.5])
-        orientation_quat = np.array([1.0, 1.0, 0.0, 0.0])
+        orientation_quat = np.array([0.0, 1.0, 0.0, 0.0])
         initial_joint_positions = np.array([0, 0, 0, 0, 0, 0, 0])
         joint_angles = calculate_ik.ik(initial_joint_positions, desired_position, orientation_quat)
         
         if joint_angles is not None:
+            noisy_joint_angles = add_noise_to_angles(joint_angles)
             dataset_entry = {
                 "current_state": None,
                 "desired_end_effector_position": desired_position.tolist(),
-                "joint_angles": joint_angles.tolist()
+                "joint_angles": noisy_joint_angles.tolist()
             }
             dataset.append(dataset_entry)
 
-    file_name = "datasets/newdataset.json"
+    file_name = "datasets/diffusion_dataset.json"
     with open(file_name, "w") as json_file:
         json.dump(dataset, json_file)
 

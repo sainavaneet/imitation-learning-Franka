@@ -7,10 +7,10 @@ import json
 class ImitationLearningModel(nn.Module):
     def __init__(self):
         super(ImitationLearningModel, self).__init__()
-        self.fc1 = nn.Linear(3, 128)  # 3 input features: x, y, z positions
+        self.fc1 = nn.Linear(3, 128)  
         self.fc2 = nn.Linear(128, 256)
         self.fc3 = nn.Linear(256, 128)
-        self.fc4 = nn.Linear(128, 7)  # 7 output features: joint angles
+        self.fc4 = nn.Linear(128, 7)  
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
