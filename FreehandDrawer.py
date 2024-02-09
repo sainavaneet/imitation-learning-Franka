@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from panda_kinematics import PandaWithHandKinematics
+from kineamatics.panda_kinematics import PandaWithHandKinematics
 import json
 
 class FreehandDrawer:
@@ -72,7 +72,7 @@ if __name__ == "__main__":
             }
             dataset.append(dataset_entry)
 
-    file_name = "/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/dataset.json"
+    file_name = "datasets/dataset.json"
     with open(file_name, "w") as json_file:
         json.dump(dataset, json_file)
 

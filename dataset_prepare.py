@@ -1,5 +1,5 @@
 import numpy as np
-from panda_kinematics import PandaWithHandKinematics
+from kineamatics.panda_kinematics import PandaWithHandKinematics
 
 # Initialize Kinematics
 kinematics = PandaWithHandKinematics()
@@ -35,4 +35,4 @@ trajectory = generate_trajectory(start_position, end_position, 100)
 dataset = generate_dataset(trajectory)
 
 # Optionally, save your dataset to a file for later use
-np.save("robot_imitation_learning_dataset.npy", dataset)
+np.save("datasets/robot_imitation_learning_dataset.npy", dataset)

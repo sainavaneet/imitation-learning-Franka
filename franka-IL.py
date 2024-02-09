@@ -43,7 +43,7 @@ def move_to_joint_angles(joint_angles):
 
 
 model = ImitationLearningModel().to(device)
-model.load_state_dict(torch.load('/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/model.pth'))
+model.load_state_dict(torch.load('models/model.pth'))
 
 def follow_trajectory(desired_trajectory):
     for point in desired_trajectory:
