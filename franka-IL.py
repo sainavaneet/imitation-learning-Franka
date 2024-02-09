@@ -4,21 +4,20 @@ from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
 import tf2_ros
 from geometry_msgs.msg import TransformStamped
-from panda_kinematics import PandaWithPumpKinematics
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
 from FreehandDrawer import FreehandDrawer
 import torch.nn.functional as F
-
 from utils import ImitationLearningModel
+
 
 rospy.init_node('robot_trajectory_follower', anonymous=True)
 tf_buffer = tf2_ros.Buffer()
 tf_listener = tf2_ros.TransformListener(tf_buffer)
 joints_publishers = [rospy.Publisher(f'/franka/panda_joint{i+1}_controller/command', Float64, queue_size=10) for i in range(7)]
-kinematics = PandaWithPumpKinematics()
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 current_robot_state = np.zeros(7)
 current_end_effector_position = np.zeros(3)
@@ -65,8 +64,8 @@ if __name__ == "__main__":
 
     update_end_effector_position()
     drawer = FreehandDrawer()
-    constant_z_height = 0.5
+    constant_z_height = 0.7
     drawn_trajectory_2d = drawer.draw_trajectory()
     desired_trajectory = [np.array([x, y, constant_z_height]) for x, y in drawn_trajectory_2d]
     follow_trajectory(desired_trajectory)
-    rospy.loginfo("<<<<-----------Trajectory Succefull--------------->>>>")
+    rospy.loginfo("<<<<-----------Trajectory Successfull--------------->>>>")

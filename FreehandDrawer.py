@@ -6,7 +6,7 @@ import json
 class FreehandDrawer:
     def __init__(self):
         self.fig, self.ax = plt.subplots()
-        self.ax.set_ylim(-0.6, 0.6)
+        self.ax.set_ylim(-0.7, 0.7)
         self.ax.set_xlim(0.0, 0.6)
         self.ax.spines['left'].set_position(('data', 0))
         self.ax.spines['bottom'].set_position(('data', 0))
