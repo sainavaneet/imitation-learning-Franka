@@ -6,8 +6,8 @@ import json
 class FreehandDrawer:
     def __init__(self):
         self.fig, self.ax = plt.subplots()
-        self.ax.set_ylim(-0.6, 0.6)
-        self.ax.set_xlim(0.2, 0.8)
+        self.ax.set_ylim(-0.3, 0.3)
+        self.ax.set_xlim(0.2, 0.6)
         self.ax.spines['left'].set_position(('data', 0))
         self.ax.spines['bottom'].set_position(('data', 0))
         self.ax.spines['right'].set_color('none')
@@ -49,16 +49,33 @@ class FreehandDrawer:
         self.fig.canvas.mpl_disconnect(self.cidrelease)
         self.fig.canvas.mpl_disconnect(self.cidmove)
         return list(zip(self.xs, self.ys))
+    
+    def interpolate_trajectory(self, num_points=10):
+        if len(self.xs) < 2:  # Need at least two points to interpolate
+            return list(zip(self.xs, self.ys))
+
+        new_xs = []
+        new_ys = []
+        for i in range(len(self.xs) - 1):
+            x_values = np.linspace(self.xs[i], self.xs[i + 1], num_points)
+            y_values = np.linspace(self.ys[i], self.ys[i + 1], num_points)
+            new_xs.extend(x_values)
+            new_ys.extend(y_values)
+
+        new_xs.append(self.xs[-1])
+        new_ys.append(self.ys[-1])
+
+        return list(zip(new_xs, new_ys))
 
 if __name__ == "__main__":
     drawer = FreehandDrawer()
     trajectory = drawer.draw_trajectory()
-    print("Drawn Trajectory Points:")
+    interpolated_trajectory = drawer.interpolate_trajectory(num_points=10) 
  
     dataset = []
     calculate_ik = PandaWithHandKinematics()
 
-    for point in trajectory:
+    for point in interpolated_trajectory:
         desired_position = np.array([point[0], point[1], 0.5])
         orientation_quat = np.array([1.0, 1.0, 0.0, 0.0])
         initial_joint_positions = np.array([0, 0, 0, 0, 0, 0, 0])

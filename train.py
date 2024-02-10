@@ -23,9 +23,9 @@ if __name__ == "__main__":
 
     model = ImitationLearningModel()
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.0001)
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    num_epochs = 10000
+    num_epochs = 100000
     for epoch in range(num_epochs):
         optimizer.zero_grad()
         outputs = model(inputs)
