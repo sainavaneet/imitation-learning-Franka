@@ -52,7 +52,7 @@ class TrajectoryAnimator:
             point.set_3d_properties(self.actual_trajectory[i-1:i, 2])
             return line, point
 
-        ani = animation.FuncAnimation(fig, animate, frames=len(self.actual_trajectory), init_func=init, blit=True, interval=30, repeat=False)
+        ani = animation.FuncAnimation(fig, animate, frames=len(self.actual_trajectory), init_func=init, blit=True, interval=30, repeat=True)
         
         plt.legend()
         plt.show()

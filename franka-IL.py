@@ -11,12 +11,11 @@ import matplotlib.pyplot as plt
 from FreehandDrawer import FreehandDrawer
 import torch.nn.functional as F
 from utils import ImitationLearningModel
-
 from animation import TrajectoryAnimator
 
 
 class SquareTraj:
-    def __init__(self, center_x=0.4, center_y=0, center_z=0.5, side_length=0.2, points_per_side=100):
+    def __init__(self, center_x=0.4, center_y=0, center_z=0.5, side_length=0.2, points_per_side=10):
         self.center_x = center_x
         self.center_y = center_y
         self.center_z = center_z
@@ -122,7 +121,7 @@ if __name__ == "__main__":
     constant_z_height = 0.5
     # trajectory = drawer.draw_trajectory()
 
-    square_trajectory_generator = SquareTraj(center_x=0.4, center_y=0, center_z=0.5, side_length=0.1, points_per_side=500)
+    square_trajectory_generator = SquareTraj(center_x=0.3, center_y=0, center_z=0.5, side_length=0.1, points_per_side=200)
     desired_trajectory = square_trajectory_generator.generate_trajectory()
 
     record_position = True  # Start recording positions
@@ -140,3 +139,4 @@ if __name__ == "__main__":
         animator.animate()
     else:
         rospy.loginfo("No positions recorded for animation.")
+
