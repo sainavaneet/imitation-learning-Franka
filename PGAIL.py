@@ -18,19 +18,19 @@ class Actor(nn.Module):
 
         self.net = nn.Sequential( 
 
-            nn.Linear(state_dim, 256), 
+            nn.Linear(state_dim, 128), 
 
             nn.ReLU(), 
 
-            nn.Linear(256, 256), 
+            nn.Linear(128, 128), 
 
             nn.ReLU(), 
 
-            nn.Linear(256, 256), 
+            nn.Linear(128, 128), 
 
             nn.ReLU(), 
 
-            nn.Linear(256, action_dim) 
+            nn.Linear(128, action_dim) 
 
         ) 
 
@@ -38,35 +38,23 @@ class Actor(nn.Module):
 
         return torch.tanh(self.net(x)) * self.max_action 
 
-class Discriminator(nn.Module): 
+class Discriminator(nn.Module):
+    def __init__(self, state_dim, action_dim):
+        super(Discriminator, self).__init__()
+        self.net = nn.Sequential(
+            nn.Linear(state_dim + action_dim, 128),
+            nn.ReLU(),
+            nn.Linear(128, 128),
+            nn.ReLU(),
+            nn.Linear(128, 128),
+            nn.ReLU(),
+            nn.Linear(128, 1),
+            nn.Sigmoid()  
+        )
 
-    def __init__(self, state_dim, action_dim): 
-
-        super(Discriminator, self).__init__() 
-
-        self.net = nn.Sequential( 
-
-            nn.Linear(state_dim + action_dim, 256), 
-
-            nn.ReLU(), 
-
-            nn.Linear(256, 256), 
-
-            nn.ReLU(), 
-
-            nn.Linear(256, 256), 
-
-            nn.ReLU(), 
-
-            nn.Linear(256, 1) 
-
-        ) 
-
-    def forward(self, state, action): 
-
-        state_action = torch.cat([state, action], 1) 
-
-        return torch.tanh(self.net(state_action)) 
+    def forward(self, state, action):
+        state_action = torch.cat([state, action], 1)
+        return self.net(state_action)
 
 class GAIL: 
 

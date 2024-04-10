@@ -18,3 +18,19 @@ class ImitationLearningModel(nn.Module):
         x = torch.relu(self.fc3(x))
         x = self.fc4(x)
         return x
+    
+class Discriminator(nn.Module):
+    def __init__(self, input_size=7):  
+        super(Discriminator, self).__init__()
+        self.network = nn.Sequential(
+            nn.Linear(input_size, 128),
+            nn.LeakyReLU(0.2),
+            nn.Linear(128, 128),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            nn.Linear(128, 1),
+            nn.Sigmoid()
+        )
+    
+    def forward(self, x):
+        return self.network(x)

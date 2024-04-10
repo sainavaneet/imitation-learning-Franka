@@ -8,14 +8,23 @@ import matplotlib.animation as animation
 import numpy as np
 
 class TrajectoryAnimator:
-    def __init__(self, actual_trajectory, reference_trajectory=None):
+    def __init__(self, actual_trajectory, reference_trajectory=None, default_z=0.5):
         # Exclude the first 50 values of the actual trajectory if it has enough points
-        if len(actual_trajectory) > 50:
+        if len(actual_trajectory) > 20:
             self.actual_trajectory = np.array(actual_trajectory[50:])
         else:
             self.actual_trajectory = np.array(actual_trajectory)
 
-        self.reference_trajectory = np.array(reference_trajectory) if reference_trajectory is not None else None
+        if reference_trajectory is not None:
+            self.reference_trajectory = np.array(reference_trajectory)
+            # Check if the reference trajectory is 2D and convert it to 3D by adding a default z-value
+            if self.reference_trajectory.shape[1] == 2:  # Assuming the second dimension is the coordinate dimension
+                # Add a z-coordinate of default_z to each point
+                z_values = np.full((self.reference_trajectory.shape[0], 1), default_z)
+                self.reference_trajectory = np.hstack((self.reference_trajectory, z_values))
+        else:
+            self.reference_trajectory = None
+
 
     def animate(self):
         fig = plt.figure()

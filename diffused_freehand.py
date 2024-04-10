@@ -13,7 +13,7 @@ if __name__ == "__main__":
     for point in interpolated_trajectory:
         desired_position = np.array([point[0], point[1], 0.5])
         orientation_quat = np.array([1.0, 1.0, 0.0, 0.0])
-        initial_joint_positions = np.array([0, 0, 0, -1.57, 0, 1.57, 0.785])
+        initial_joint_positions = np.array([0.0,0.0,0.0,0.0,0.0,0.0,0.0])
         joint_angles = calculate_ik.ik(initial_joint_positions, desired_position, orientation_quat)
         
         if joint_angles is not None:

@@ -8,10 +8,10 @@ import json
 class ImitationLearningModel(nn.Module):
     def __init__(self):
         super(ImitationLearningModel, self).__init__()
-        self.fc1 = nn.Linear(3, 128)  
-        self.fc2 = nn.Linear(128, 256)
-        self.fc3 = nn.Linear(256, 128)
-        self.fc4 = nn.Linear(128, 7)  
+        self.fc1 = nn.Linear(3, 64)  
+        self.fc2 = nn.Linear(64, 64)
+        self.fc3 = nn.Linear(64, 64)
+        self.fc4 = nn.Linear(64, 7)  
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
@@ -31,15 +31,15 @@ def prepare_data(dataset):
     return inputs, targets
 
 if __name__ == "__main__":
-    dataset_path = "/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/datasets/newdataset.json"
+    dataset_path = "/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/datasets/test.json"
     dataset = load_dataset(dataset_path)
     inputs, targets = prepare_data(dataset)
 
     model = ImitationLearningModel()
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    optimizer = optim.Adam(model.parameters(), lr=0.01)
 
-    num_epochs = 100000
+    num_epochs = 10000
     for epoch in range(num_epochs):
         optimizer.zero_grad()
         outputs = model(inputs)
@@ -50,6 +50,6 @@ if __name__ == "__main__":
             print(f"Epoch {epoch}, Loss: {loss.item()}")
 
     # Save the trained model
-    torch.save(model.state_dict(), "/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/models/newmodel.pth")
+    torch.save(model.state_dict(), "/home/navaneet/Desktop/GITHUB/imitation-learning-Franka/models/test.pth")
     
     print("Model training complete and saved.")

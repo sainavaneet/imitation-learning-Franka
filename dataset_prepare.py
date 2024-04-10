@@ -124,7 +124,7 @@ def main():
 
     kinematics = PandaWithHandKinematics()
     waypoints_square = np.array([[0.6, 0.2, 0.6],[0.6, 0.2, 0.6], [0.6, 0.0, 0.6], [0.4, 0.0, 0.6], [0.4, 0.2, 0.6], [0.6, 0.2, 0.6]])  # Ensure waypoints are numpy arrays
-    orientation_quat = np.array([1.0, 1.0, 0.0, 0.0])  # Confirm orientation is a numpy array with shape (4,)
+    orientation_quat = np.array([1.0, 1.0, 0.0, 0.0]) 
 
     for waypoint in waypoints_square:
 

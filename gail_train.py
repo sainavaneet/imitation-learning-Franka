@@ -6,12 +6,10 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # Training configuration
 env_name = "Franka"
-solved_reward = 300
+# solved_reward = 300
 random_seed = 0
-max_timesteps = 20000
-n_eval_episodes = 20
 lr = 0.0002
-betas = (0.5, 0.999)
+betas = (0.9, 0.999)
 n_epochs = 3000
 n_iter = 100
 batch_size = 100

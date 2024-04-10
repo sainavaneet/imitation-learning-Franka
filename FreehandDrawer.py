@@ -6,8 +6,8 @@ import json
 class FreehandDrawer:
     def __init__(self):
         self.fig, self.ax = plt.subplots()
-        self.ax.set_ylim(-0.3, 0.3)
-        self.ax.set_xlim(0.2, 0.6)
+        self.ax.set_ylim(-0.7, 0.7)
+        self.ax.set_xlim(0.1, 0.8)
         self.ax.spines['left'].set_position(('data', 0))
         self.ax.spines['bottom'].set_position(('data', 0))
         self.ax.spines['right'].set_color('none')
@@ -89,7 +89,7 @@ if __name__ == "__main__":
             }
             dataset.append(dataset_entry)
 
-    file_name = "datasets/newdataset.json"
+    file_name = "datasets/test.json"
     with open(file_name, "w") as json_file:
         json.dump(dataset, json_file)
 
