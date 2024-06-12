@@ -8,10 +8,10 @@ import json
 class ImitationLearningModel(nn.Module):
     def __init__(self):
         super(ImitationLearningModel, self).__init__()
-        self.fc1 = nn.Linear(3, 64)  
-        self.fc2 = nn.Linear(64, 64)
-        self.fc3 = nn.Linear(64, 64)
-        self.fc4 = nn.Linear(64, 7)  
+        self.fc1 = nn.Linear(3, 128)  
+        self.fc2 = nn.Linear(128, 256)
+        self.fc3 = nn.Linear(256, 128)
+        self.fc4 = nn.Linear(128, 7)  
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     model = ImitationLearningModel()
     criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.01)
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
 
     num_epochs = 10000
     for epoch in range(num_epochs):
