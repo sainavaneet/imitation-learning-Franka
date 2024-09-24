@@ -13,7 +13,6 @@ import torch.nn.functional as F
 from utils import ImitationLearningModel
 from animation import TrajectoryAnimator
 
-
 class SquareTraj:
     def __init__(self, center_x=0.4, center_y=0, center_z=0.5, side_length=0.2, points_per_side=10):
         self.center_x = center_x
